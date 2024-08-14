@@ -31,6 +31,8 @@ class PopulationBasedSampleSize:
         Returns:
             float: The calculated sample size.
         """
+        if self.population_size <= 100:
+            return 0.25*self.population_size
         return math.ceil(math.sqrt(self.population_size) * math.log(self.population_size, 10)*10)
 class MarginOfErrorSampleSize:
     ''''''
@@ -58,10 +60,29 @@ class MarginOfErrorSampleSize:
 
 class StratifiedSampleSize:
     def __init__(self, strata_sizes, population_size):
+        """
+        Initializes the instance with the given strata_sizes and population_size.
+
+        Parameters:
+            strata_sizes (list): A list of strata sizes.
+            population_size (int): The total population size.
+
+        Returns:
+            None
+        """
         self.strata_sizes = strata_sizes
         self.population_size = population_size
 
     def calculate_sample_size(self, total_sample_size):
+        """
+        Calculate the sample sizes for each stratum based on the total sample size and the population size.
+
+        Parameters:
+            total_sample_size (int): The total sample size to be allocated across strata.
+
+        Returns:
+            list: A list of sample sizes for each stratum.
+        """
         sample_sizes = [round(total_sample_size * size / self.population_size) for size in self.strata_sizes]
         return sample_sizes
 
